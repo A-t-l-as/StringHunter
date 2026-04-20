@@ -6,6 +6,13 @@
 
 void cleanSimpleBinFile(SimpleBinFile* argFile);
 
-void printAllStrings(SimpleBinFile* argFile, size_t minNumberOfChars, FILE* output);
+void printAllStrings
+(
+    SimpleBinFile* argInputFile,
+    size_t minNumberOfChars,
+    SimpleBinFile* argOutputFile
+);
+
+int64_t getSumOfStringsSizes(SimpleBinFile* argFile, size_t minNumberOfChars);
 
 #endif // !STRING_HUNTER_H

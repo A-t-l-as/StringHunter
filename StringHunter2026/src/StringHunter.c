@@ -15,9 +15,47 @@ void cleanSimpleBinFile(SimpleBinFile* argFile)
     }
 }
 
-void printAllStrings(SimpleBinFile* argFile, size_t minNumberOfChars, FILE* output)
+
+
+void printAllStrings(SimpleBinFile* argInputFile, size_t minNumberOfChars, SimpleBinFile* argOutputFile)
 {
     bool block = false;
+
+    int64_t writePos = 0;
+
+    for(int64_t i = 0; i < argInputFile->sizeOfFile; ++i)
+    {
+        if((argInputFile->buffer[i] != ((uint8_t)'\0')) && block == false)
+        {
+            const char* const string = (const char* const)(&argInputFile->buffer[i]);
+            const size_t sizeOfString = strlen(string);
+
+            if(sizeOfString >= minNumberOfChars)
+            {
+                memcpy(argOutputFile->buffer + writePos, string, sizeOfString);
+                writePos += sizeOfString;
+                argOutputFile->buffer[writePos] = '\n';
+                writePos++;
+            }
+
+            block = true;
+        }
+
+        if(argInputFile->buffer[i] == ((uint8_t)'\0'))
+        {
+            block = false;
+        }
+
+    }
+}
+
+
+
+int64_t getSumOfStringsSizes(SimpleBinFile* argFile, size_t minNumberOfChars)
+{
+    bool block = false;
+
+    int64_t sumOfSizes = 0;
 
     for(int64_t i = 0; i < argFile->sizeOfFile; ++i)
     {
@@ -28,7 +66,7 @@ void printAllStrings(SimpleBinFile* argFile, size_t minNumberOfChars, FILE* outp
 
             if(sizeOfString >= minNumberOfChars)
             {
-                fprintf(output, "%s\n", string);
+                sumOfSizes += sizeOfString + 1; // +1 dla \n
             }
 
             block = true;
@@ -40,4 +78,6 @@ void printAllStrings(SimpleBinFile* argFile, size_t minNumberOfChars, FILE* outp
         }
 
     }
+
+    return sumOfSizes;
 }

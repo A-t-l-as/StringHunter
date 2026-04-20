@@ -43,34 +43,29 @@ int main(int argc, char* argv[])
 
 
     int error = CODE_SUCCESS;
-    SimpleBinFile* inputBinFile = newSimpleBinFile(argv[SRC_FILE_PATH_INDEX], &error);
 
+    SimpleBinFile* inputBinFile = loadSimpleBinFile(argv[SRC_FILE_PATH_INDEX], &error);
     if(error == CODE_FAILURE)
         exit(CODE_FAILURE);
 
     cleanSimpleBinFile(inputBinFile);
+    const int64_t sizeOfOutputFile = getSumOfStringsSizes(inputBinFile, (size_t)n);
 
-    FILE* outputFile = fopen(argv[DST_FILE_PATH_INDEX], "w");
-
-    printf("Output file: %s\n", argv[DST_FILE_PATH_INDEX]);
-
-    if(!outputFile)
+    SimpleBinFile* outputBinFile = newSimpleBinFile(argv[DST_FILE_PATH_INDEX], sizeOfOutputFile, &error);
+    if(error == CODE_FAILURE)
     {
-        perror("An error occurred while creating the output file.");
-        error = CODE_FAILURE;
-    }
-    else
-    {
-        printAllStrings(inputBinFile, (size_t)n, outputFile);
-
-        if( fclose(outputFile) == EOF)
-        {
-            perror("File close error");
-            error = CODE_FAILURE;
-        }
+        inputBinFile = destroySimpleBinFile(inputBinFile);
+        exit(CODE_FAILURE);
     }
 
-    inputBinFile = destroySimpleBinFile(inputBinFile);
+    printAllStrings(inputBinFile, (size_t)n, outputBinFile);
+
+    outputBinFile = saveSimpleBinFile(outputBinFile, argv[DST_FILE_PATH_INDEX], &error);
+
+    inputBinFile  = destroySimpleBinFile(inputBinFile);
+    outputBinFile = destroySimpleBinFile(outputBinFile);
+
+    printf("The program completed successfully.");
 
     exit(error);
 }

@@ -13,7 +13,10 @@ typedef struct SimpleBinFile
 }
 SimpleBinFile;
 
-SimpleBinFile* newSimpleBinFile(const char* const argPath, int* error);
+SimpleBinFile* loadSimpleBinFile(const char* const argPath, int* error);
+SimpleBinFile* newSimpleBinFile(const char* const tempName, int64_t argSizeOfFile, int* error);
+SimpleBinFile* saveSimpleBinFile(SimpleBinFile* argFile, const char* const argPath, int* error);
+
 SimpleBinFile* destroySimpleBinFile(SimpleBinFile* argFile);
 
 #endif // !SIMPLE_BIN_FILE_H
