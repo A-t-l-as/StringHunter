@@ -6,12 +6,7 @@
 
 void cleanSimpleBinFile(SimpleBinFile* argFile);
 
-void printAllStrings
-(
-    SimpleBinFile* argInputFile,
-    size_t minNumberOfChars,
-    SimpleBinFile* argOutputFile
-);
+void printAllStrings(SimpleBinFile* argInputFile, size_t minNumberOfChars, SimpleBinFile* argOutputFile);
 
 int64_t getSumOfStringsSizes(SimpleBinFile* argFile, size_t minNumberOfChars);
 
